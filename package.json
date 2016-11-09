@@ -1,0 +1,14 @@
+{
+  "name": "20-questions-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Galen Corey",
+  "license": "ISC",
+  "dependencies": {
+    "sequelize": "^3.24.8"
+  }
+}
