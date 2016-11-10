@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../_db');
+const Score = require('./score-model.js');
 
 module.exports = db.define('item', {
   name: {
