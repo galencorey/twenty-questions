@@ -11,7 +11,7 @@ module.exports = db.define('score', {
     allowNull: false
   },
   score: {
-    type: Sequelize.FlOAT,
+    type: Sequelize.FLOAT,
     defaultValue: 0.5
   }
 })

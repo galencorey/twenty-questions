@@ -1,11 +1,11 @@
 const Sequelize = require('sequelize');
-const Promise = Sequelize.promise;
+const Promise = require('bluebird');
 const chalk = require('chalk');
 
-const db = require('./models/db/_db.js');
-const Item = db.model('item');
-const Question = db.model('question');
-const Score = db.model('score');
+const db = require('./db/_db.js');
+const Item = require('./db/models/item-model.js');
+const Question = require('./db/models/question-model.js');
+const Score = require('./db/models/score-model.js');
 
 function seedQuestions(){
   const questions = [
@@ -16,7 +16,7 @@ function seedQuestions(){
   ];
 
   const creatingQuestions = questions.map(question =>{
-    return Question.create(question);
+    return Question.create({body: question});
   })
 
   return Promise.all(creatingQuestions);
@@ -30,8 +30,8 @@ function seedItems(){
     'Nemo'
   ];
 
-  const creatingItems = items.map(question =>{
-    return Item.create(question);
+  const creatingItems = items.map(item =>{
+    return Item.create({name: item});
   })
 
   return Promise.all(creatingItems);
@@ -40,6 +40,7 @@ function seedItems(){
 function seedScores(){
   return Question.findAll()
   .then(function(questions){
+    console.log(chalk.magenta(questions));
     let updates = [];
     questions.forEach(question => {
       updates.push(question.updateScore(1));
