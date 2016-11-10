@@ -15,8 +15,4 @@ module.exports = db.define('score', {
     defaultValue: 0.5
   }
 })
-/*
-todo add class methods
-  - update score
-  - add a set to the db
-*/
+
