@@ -40,7 +40,6 @@ function seedItems(){
 function seedScores(){
   return Question.findAll()
   .then(function(questions){
-    console.log(chalk.magenta(questions));
     let updates = [];
     questions.forEach(question => {
       updates.push(question.updateScore(1));

@@ -13,7 +13,7 @@ module.exports = db.define('question', {
     //this method can create or update an existig score
     updateScore(item_id, score = 0.5){
       return Score.findOrCreate({where: {item_id, question_id: this.id}})
-      .then(foundScore => {
+      .then(([foundScore]) => {
         let oldScore = foundScore.score;
         let newScore = (oldScore + score) / 2;
         return foundScore.update({score: newScore});
