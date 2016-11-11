@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../_db');
 const Score = require('./score-model.js');
+const Question = require('./question-model.js');
 
 module.exports = db.define('item', {
   name: {
@@ -17,6 +18,18 @@ module.exports = db.define('item', {
         let newScore = (oldScore + score) / 2;
         return foundScore.update({score: newScore});
       })
+    },
+    hooks: {
+      afterSave(item){
+        Question.findAll()
+        .then(questions =>{
+          var creatingScores = questions.map(question =>{
+            return question.updateScore(item.id)
+          });
+          return Promise.all(creatingScores)
+        })
+      }
     }
-  }
+  },
 })
+

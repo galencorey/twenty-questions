@@ -37,34 +37,19 @@ function seedItems(){
   return Promise.all(creatingItems);
 }
 
-function seedScores(){
-  return Question.findAll()
-  .then(function(questions){
-    let updates = [];
-    questions.forEach(question => {
-      updates.push(question.updateScore(1));
-      updates.push(question.updateScore(2));
-      updates.push(question.updateScore(3));
-      updates.push(question.updateScore(4));
-    })
-    return Promise.all(updates);
-  })
-}
-
 db.sync({force: true})
 .then(()=>{
   console.log(chalk.blue('synced db'));
   return seedQuestions();
-}).then(()=>{
-  console.log(chalk.blue('seeded questions'))
+})
+.then(()=>{
   return seedItems();
-}).then(()=>{
-  console.log(chalk.blue('seeded items'))
-  return seedScores();
-}).then(()=>{
+})
+.then(()=>{
   console.log(chalk.green('Seed successful!'));
   process.exit(0);
-}).catch(err => {
+})
+.catch(err => {
     console.error(err);
     process.exit(1);
 });
