@@ -3,6 +3,8 @@ const db = require('../_db');
 const Score = require('./score-model.js');
 const Question = require('./question-model.js');
 
+const chalk = require('chalk');
+
 module.exports = db.define('item', {
   name: {
     type: Sequelize.STRING(100),
@@ -19,9 +21,10 @@ module.exports = db.define('item', {
         return foundScore.update({score: newScore});
       })
     },
+  },
     hooks: {
-      afterSave(item){
-        Question.findAll()
+      afterCreate: function(item){
+        return Question.findAll()
         .then(questions =>{
           var creatingScores = questions.map(question =>{
             return question.updateScore(item.id)
@@ -30,6 +33,5 @@ module.exports = db.define('item', {
         })
       }
     }
-  },
 })
 
