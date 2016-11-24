@@ -11,12 +11,11 @@ function Game(){
   this.solution = '';
 }
 
-Game.prototype.printPossibilities = function(){
-  console.log('POSS', this.possibilities);
-}
 
 
 Game.prototype.initialize = function(){
+  //Creates a new game by obtaining all possible items, questions, and their
+  //corresponding scores from the database
   const self = this;
   const dbPromises = [Item.findAll(), Score.findAll(), Question.findAll()];
 
@@ -25,6 +24,30 @@ Game.prototype.initialize = function(){
     self.questions = questions;
     self.possibilities = new ItemList(items, scores);
   })
+}
+
+Game.prototype.processResponse = function(response){
+  //Processes a response by pushing the response to the game object's response
+  //array for storage, and adjusts the possibilities array
+  this.responses.push(response);
+
+  let revisedPossibilities = this.possibilities.filter((poss) => {
+    let score = poss.scores.find((score)=>{
+      return score.questionId === response.questionId;
+    });
+    return score.score > 0.25;
+  });
+
+  revisedPossibilities.sort(function(poss1, poss2){
+    return poss1.score.score > poss2.score.score;
+  })
+}
+
+/***** testing down here ******/
+
+Game.prototype.printPossibilities = function(){
+  //for testing purposes, logs all possibilities of a game
+  console.log('POSS', this.possibilities);
 }
 
 

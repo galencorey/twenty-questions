@@ -3,8 +3,8 @@ function ItemList(items, scores){
   this.list = items.map(item => {
     item.scores = [];
     scores.forEach(function(score){
-      if (score.item_id === item.id){
-        item.scores.push(score);
+      if (score.itemId === item.id){
+        item.scores.push();
       }
     })
     return item;
