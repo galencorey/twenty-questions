@@ -1,5 +1,5 @@
 //generates a list of items joined with corresponding scores
-function ItemList(items, scores){
+function PossibilityList(items, scores){
   this.list = items.map(item => {
     item.scores = [];
     scores.forEach(function(score){
@@ -11,4 +11,4 @@ function ItemList(items, scores){
   })
 }
 
-module.exports = ItemList;
+module.exports = PossibilityList;

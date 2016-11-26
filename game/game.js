@@ -2,16 +2,15 @@ const Item = require('../db/models/item-model');
 const Score = require('../db/models/score-model');
 const Question = require('../db/models/question-model');
 
-const ItemList = require('./item-list');
+const PossibilityList = require('./possibilities');
 
 function Game(){
   this.possibilities = [];
   this.questions = [];
   this.responses = [];
   this.solution = '';
+  this.questionCount = 0;
 }
-
-
 
 Game.prototype.initialize = function(){
   //Creates a new game by obtaining all possible items, questions, and their
@@ -22,7 +21,7 @@ Game.prototype.initialize = function(){
   return Promise.all(dbPromises)
   .then(([items, scores, questions]) =>{
     self.questions = questions;
-    self.possibilities = new ItemList(items, scores);
+    self.possibilities = new PossibilityList(items, scores);
   })
 }
 
@@ -43,6 +42,12 @@ Game.prototype.processResponse = function(response){
   })
 }
 
+Game.prototype.getQuestion = function(){
+  //returns a random question and removes it from the questions array
+  const randIdx = Math.floor(Math.random()*this.questions.length);
+
+  return this.questions.splice(randIdx, 1);
+}
 /***** testing down here ******/
 
 Game.prototype.printPossibilities = function(){
