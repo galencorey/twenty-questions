@@ -4,12 +4,13 @@ const Question = require('../db/models/question-model');
 
 const PossibilityList = require('./possibilities');
 
+module.exports = Game;
+
 function Game(){
   this.possibilities = [];
   this.questions = [];
   this.responses = [];
   this.solution = '';
-  this.questionCount = 0;
 }
 
 Game.prototype.initialize = function(){
@@ -21,7 +22,8 @@ Game.prototype.initialize = function(){
   return Promise.all(dbPromises)
   .then(([items, scores, questions]) =>{
     self.questions = questions;
-    self.possibilities = new PossibilityList(items, scores);
+    let possibilities = new PossibilityList(items, scores);
+    self.possibilities = possibilities.list;
   })
 }
 
@@ -32,8 +34,9 @@ Game.prototype.processResponse = function(response){
 
   let revisedPossibilities = this.possibilities.filter((poss) => {
     let score = poss.scores.find((score)=>{
-      return score.questionId === response.questionId;
+      return score.questionId == response.questionId;
     });
+    console.log("SCORE ", score)
     return score.score > 0.25;
   });
 
@@ -45,23 +48,23 @@ Game.prototype.processResponse = function(response){
 Game.prototype.getQuestion = function(){
   //returns a random question and removes it from the questions array
   const randIdx = Math.floor(Math.random()*this.questions.length);
-
   return this.questions.splice(randIdx, 1);
+
 }
 /***** testing down here ******/
 
-Game.prototype.printPossibilities = function(){
-  //for testing purposes, logs all possibilities of a game
-  console.log('POSS', this.possibilities);
-}
+// Game.prototype.printPossibilities = function(){
+//   //for testing purposes, logs all possibilities of a game
+//   console.log('POSS', this.possibilities);
+// }
 
 
-var test = new Game();
+// var test = new Game();
 
-test.initialize()
-.then(()=>{
-  test.printPossibilities();
-})
-.catch((err)=>{
-  console.error(err);
-})
+// test.initialize()
+// .then(()=>{
+//   test.printPossibilities();
+// })
+// .catch((err)=>{
+//   console.error(err);
+// });
